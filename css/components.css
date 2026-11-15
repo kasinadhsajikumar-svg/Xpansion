@@ -1,0 +1,438 @@
+/* =============================================================================
+   LUNAR NAV — Component Library: Operations Control & Spacecraft Avionics
+   Colors: #05070B, #09121B, #0B2028, #36D6D0, #65D9B0, #D29922, #F85149, #D8E5E9
+   ============================================================================= */
+
+/* ── Technical Surface Panels ───────────────────────────────────────────────── */
+.glass-panel, .panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  position: relative;
+  transition: var(--transition);
+}
+
+.glass-panel:hover {
+  border-color: rgba(54, 214, 208, 0.3);
+}
+
+/* Technical Bracket Corner Accents */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--accent-cyan);
+  border-left: 1px solid var(--accent-cyan);
+  pointer-events: none;
+}
+
+/* Border Accent Variants */
+.glow-cyan, .border-accent {
+  border-color: var(--accent-cyan-border);
+  border-top: 1px solid var(--accent-cyan);
+}
+
+.glow-gold {
+  border-color: rgba(210, 153, 34, 0.45);
+  border-top: 1px solid var(--status-amber);
+}
+
+.glow-green {
+  border-color: rgba(101, 217, 176, 0.45);
+  border-top: 1px solid var(--status-green);
+}
+
+.glow-hazard {
+  border-color: rgba(248, 81, 73, 0.45);
+  border-top: 1px solid var(--status-red);
+}
+
+/* ── HUD Telemetry Tags & Pips ──────────────────────────────────────────────── */
+.hud-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  background: var(--bg-instrument);
+  border: 1px solid var(--accent-cyan-border);
+  padding: 2px 6px;
+  border-radius: 1px;
+  margin-bottom: 6px;
+}
+
+.hud-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.hud-indicator.active {
+  color: var(--status-green);
+}
+
+/* ── Technical Command Buttons ──────────────────────────────────────────────── */
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.btn-hud-primary {
+  background: var(--bg-instrument);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-sm);
+  color: var(--accent-cyan);
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: var(--transition);
+}
+
+.btn-hud-primary:hover {
+  background: var(--accent-cyan);
+  color: #05070B;
+}
+
+.btn-hud-secondary {
+  background: #070E16;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.btn-hud-secondary:hover {
+  border-color: var(--accent-cyan-border);
+  background: var(--bg-instrument);
+  color: #ffffff;
+}
+
+.btn-hud-ghost {
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition);
+}
+
+.btn-hud-ghost:hover {
+  border-color: var(--border-instrument);
+  color: var(--text-primary);
+}
+
+.btn-icon-sm {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #05070B;
+  border: 1px solid var(--border-instrument);
+  border-radius: 1px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  transition: var(--transition);
+}
+
+.btn-icon-sm:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+/* Audio Control Button */
+.audio-btn {
+  background: #05070B;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  color: var(--accent-cyan);
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.05em;
+  transition: var(--transition);
+}
+
+.audio-btn.muted {
+  color: var(--text-muted);
+  border-color: var(--border-primary);
+}
+
+/* ── Form Controls & Instrumentation Inputs ─────────────────────────────────── */
+.hud-select, select {
+  background: #05070B;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 5px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.hud-select:hover, .hud-select:focus, select:focus {
+  border-color: var(--accent-cyan);
+}
+
+.hud-select-sm {
+  background: #05070B;
+  border: 1px solid var(--border-instrument);
+  border-radius: 1px;
+  color: var(--text-primary);
+  padding: 3px 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  outline: none;
+}
+
+input[type="text"], input[type="number"], input[type="date"] {
+  background: #05070B;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  padding: 5px 8px;
+  outline: none;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* Range Sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: #152430;
+  border-radius: 1px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 1px;
+  background: var(--accent-cyan);
+  cursor: pointer;
+  border: 1px solid #05070B;
+  transition: var(--transition);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #ffffff;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #05070B;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  gap: 6px;
+  flex: 1;
+  max-width: 420px;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  width: 100%;
+  outline: none;
+}
+
+.search-box input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Mini Bar Tracks */
+.mini-bar-track {
+  width: 100%;
+  height: 3px;
+  background: #142530;
+  border-radius: 1px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+
+.mini-bar-fill.cyan { background: var(--accent-cyan); }
+.mini-bar-fill.gold { background: var(--status-amber); }
+.mini-bar-fill.badge-safe { background: var(--status-green); }
+.mini-bar-fill.badge-caution { background: var(--status-amber); }
+.mini-bar-fill.badge-hazard { background: var(--status-red); }
+
+/* ── Standardized Technical Color Utilities ─────────────────────────────────── */
+.cyan { color: var(--accent-cyan) !important; }
+.gold { color: var(--status-amber) !important; }
+.green { color: var(--status-green) !important; }
+.silver { color: var(--text-secondary) !important; }
+.purple { color: #8F80FF !important; }
+.hazard-text { color: var(--status-red) !important; }
+.caution-text { color: var(--status-amber) !important; }
+.safe-text { color: var(--status-green) !important; }
+
+.status-lit { color: var(--status-amber); font-weight: 700; }
+.status-shadow { color: var(--status-red); font-weight: 700; }
+
+/* ── Operations Terminal Modals ─────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 11, 0.88);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.modal-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px 24px;
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-sm);
+  animation: modalSnap 0.15s ease forwards;
+}
+
+@keyframes modalSnap {
+  from { transform: scale(0.98); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-instrument);
+}
+
+.modal-title-wrap h2 {
+  font-size: 1.25rem;
+  margin-top: 2px;
+}
+
+.artemis-subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-cyan);
+  letter-spacing: 0.05em;
+}
+
+.btn-close {
+  background: transparent;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  transition: var(--transition);
+}
+
+.btn-close:hover {
+  color: #ffffff;
+  border-color: var(--status-red);
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-instrument);
+}
+
+/* Dossier Lists */
+.dossier-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dossier-list li {
+  padding: 4px 8px;
+  background: #05070B;
+  border-radius: 1px;
+  font-size: 11.5px;
+  border-left: 2px solid var(--accent-cyan);
+}
+
+.dossier-list li strong {
+  color: var(--text-primary);
+  margin-right: 6px;
+}

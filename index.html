@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUNAR NAV // OPS — Aerospace Mission Operations &amp; Telemetry Terminal</title>
+  <meta name="description" content="Aerospace mission operations and spacecraft telemetry system for Artemis lunar South Pole exploration, orbital ephemeris synchronization, and surface hazard navigation.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌕</text></svg>">
+
+  <!-- Google Fonts: Technical Monospace Engineering Suite -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/telemetry.css">
+  <link rel="stylesheet" href="css/missions.css">
+
+  <!-- External Libraries: Three.js, OrbitControls, Chart.js, html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- NASA Mission Control Aerospace Sidebar Navigation -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrap" data-tab="home">
+          <div class="brand-icon">
+            <i class="fa-solid fa-crosshairs"></i>
+          </div>
+          <div class="brand-text">
+            <h1>LUNAR NAV // OPS</h1>
+            <div class="brand-tagline">ARTEMIS SOPOLE MOC</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section-title">Mission Modules</div>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-links" id="main-nav-links">
+          <li>
+            <button class="nav-btn active" data-tab="home">
+              <i class="fa-solid fa-gauge"></i> <span class="nav-text">[01] SYS.DASH // OVERVIEW</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="explorer">
+              <i class="fa-solid fa-globe"></i> <span class="nav-text">[02] NAV.GLOBE // 3D EXPLORER</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="moontrek">
+              <i class="fa-solid fa-mountain-sun"></i> <span class="nav-text">[03] GIS.TERR // 3D TERRAIN</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="sites">
+              <i class="fa-solid fa-location-dot"></i> <span class="nav-text">[04] CAT.SITE // CANDIDATE SITES</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="comparison">
+              <i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">[05] ANA.MCDA // SITE COMPARISON</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="sunlight">
+              <i class="fa-solid fa-sun"></i> <span class="nav-text">[06] SIM.SOL // SUNLIGHT SIM</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="solar">
+              <i class="fa-solid fa-solar-panel"></i> <span class="nav-text">[07] PWR.BGT // SOLAR POWER</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="comm">
+              <i class="fa-solid fa-satellite-dish"></i> <span class="nav-text">[08] RF.LINK // EARTH DTE COMM</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="safety">
+              <i class="fa-solid fa-shield-halved"></i> <span class="nav-text">[09] SAF.LND // LANDING SAFETY</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="planner">
+              <i class="fa-solid fa-calendar-days"></i> <span class="nav-text">[10] PLN.WIN // MISSION PLANNER</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="missions">
+              <i class="fa-solid fa-rocket"></i> <span class="nav-text">[11] MIS.CSA // LUNAR MISSIONS</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="report">
+              <i class="fa-solid fa-file-contract"></i> <span class="nav-text">[12] REP.CERT // MISSION REPORT</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="audio-toggle-btn" class="audio-btn" title="Toggle Mission Audio Feedback">
+          <i class="fa-solid fa-volume-high"></i> <span class="btn-lbl">AUDIO ON</span>
+        </button>
+        <div class="sidebar-status-pill">
+          <span class="status-indicator-dot"></span>
+          <span>JPL HORIZONS: ACTIVE</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <div class="main-wrapper">
+      <!-- NASA Mission Control Telemetry Top Bar -->
+      <header class="telemetry-header">
+        <div class="telemetry-top-strip">
+          <div class="strip-left">
+            <button class="mobile-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <span class="mission-id-tag">[■ MISSION: ARTEMIS-LSS-01 // OPS.ID: SOPOLE-NAV]</span>
+            <div class="strip-item">
+              <span class="pulse-dot"></span>
+              <span>SYS: <strong>NOMINAL</strong></span>
+            </div>
+            <div class="strip-item">
+              <i class="fa-solid fa-clock"></i>
+              <span id="hud-utc-clock">UTC: 2026-11-15 00:00:00</span>
+            </div>
+            <div class="strip-item">
+              <i class="fa-solid fa-stopwatch"></i>
+              <span id="hud-met-clock">MET: 001d 15h 40m 50s</span>
+            </div>
+          </div>
+          <div class="strip-right">
+            <div class="strip-item">
+              <i class="fa-solid fa-sun"></i>
+              <span>SUB-SOLAR: <strong>-1.54° LAT</strong></span>
+            </div>
+            <div class="strip-item">
+              <i class="fa-solid fa-earth-americas"></i>
+              <span>SUB-EARTH LIBR: <strong>+6.20° LAT</strong></span>
+            </div>
+            <div class="strip-item">
+              <i class="fa-solid fa-satellite"></i>
+              <span>DSN: <strong>GOLDSTONE-34M [CARRIER-LOCK]</strong></span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+    <!-- Main Content Container -->
+    <main class="app-content">
+
+      <!-- ==================================================================
+           TAB 1: HOME DASHBOARD / FLIGHT OPERATIONS CONSOLE
+           ================================================================== -->
+      <section id="view-home" class="tab-view active">
+        <!-- Flight Operations Telemetry Terminal Banner -->
+        <div class="ops-terminal-hero glass-panel glow-cyan">
+          <div class="ops-hero-meta">
+            <div class="ops-meta-left">
+              <span class="hud-tag"><i class="fa-solid fa-terminal"></i> CONSOLE: FLIGHT-DIR-01</span>
+              <span class="hud-tag"><i class="fa-solid fa-satellite"></i> EPHEMERIS: JPL-HORIZONS // LOCKED</span>
+              <span class="hud-tag"><i class="fa-solid fa-crosshairs"></i> REGION: SOUTH POLE (84°S-90°S)</span>
+            </div>
+            <div class="ops-meta-right">
+              <span class="hud-indicator"><span class="pulse-dot"></span> TELEMETRY STREAM: 100 Hz</span>
+            </div>
+          </div>
+
+          <div class="ops-terminal-headline">
+            <h2 class="ops-terminal-title">// LUNAR LANDING SITE OPERATIONS TERMINAL</h2>
+            <div class="ops-terminal-sub">FLIGHT OPERATIONS &amp; SURFACE RECONNAISSANCE SYSTEM • ARTEMIS EXPEDITION SUITE</div>
+          </div>
+
+          <p class="ops-terminal-desc">
+            Primary ground operations terminal for Artemis South Pole landing site navigation, orbital ephemeris synchronization, and precision lunar surface hazard evaluation. Continuous real-time telemetry processing integrates NASA/JPL Horizons solar-terrestrial vectors, LOLA laser altimetry, and LROC sub-meter optical datasets.
+          </p>
+
+          <div class="ops-status-matrix">
+            <div class="matrix-cell">
+              <span class="m-lbl">FLIGHT PHASE</span>
+              <span class="m-val cyan">ORBITAL RECON // SITE QUAL</span>
+            </div>
+            <div class="matrix-cell">
+              <span class="m-lbl">CELESTIAL EPHEMERIS</span>
+              <span class="m-val green">NASA/JPL HORIZONS ACTIVE</span>
+            </div>
+            <div class="matrix-cell">
+              <span class="m-lbl">GROUND RADAR / DSN</span>
+              <span class="m-val cyan">DSS-14 GOLDSTONE (LOCK)</span>
+            </div>
+            <div class="matrix-cell">
+              <span class="m-lbl">POLAR COLD TRAP (PSR)</span>
+              <span class="m-val gold">VOLATILE MAPPING READY</span>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <button id="hero-start-btn" class="btn-hud-primary btn-hero-launch glow-cyan">
+              <i class="fa-solid fa-crosshairs"></i> [02] LAUNCH 3D GLOBE EXPLORER
+            </button>
+            <button class="btn-hud-secondary glow-gold" data-tab="moontrek">
+              <i class="fa-solid fa-mountain-sun gold"></i> [03] 3D TERRAIN (MOON TREK)
+            </button>
+            <button class="btn-hud-secondary" data-tab="sites">
+              <i class="fa-solid fa-list-check"></i> [04] BROWSE CANDIDATE CATALOG (10)
+            </button>
+            <button class="btn-hud-ghost" data-tab="comparison">
+              <i class="fa-solid fa-sliders"></i> [05] RUN MCDA MULTI-SITE AUDIT
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Mission Target Telemetry Strip -->
+        <div class="home-target-overview glass-panel glow-cyan">
+          <div class="target-header-row">
+            <div class="target-header-left">
+              <span class="hud-tag"><i class="fa-solid fa-bullseye"></i> DESIGNATED TARGET // TELEMETRY BUFFER</span>
+              <h3 id="home-target-name">Malapert Mountain (Peak)</h3>
+              <div class="target-coords-strip" id="home-target-coords">-84.90° S, 12.90° E (+5040m LOLA)</div>
+            </div>
+            <div class="target-header-right">
+              <button class="btn-hud-primary" data-tab="explorer">
+                <i class="fa-solid fa-crosshairs"></i> ENGAGE 3D TARGET TRACKING
+              </button>
+            </div>
+          </div>
+
+          <div class="home-telemetry-grid">
+            <div class="telemetry-cell">
+              <span class="cell-lbl"><i class="fa-solid fa-award"></i> Suitability Index</span>
+              <span class="cell-val cyan" id="home-target-score">96%</span>
+              <span class="cell-sub">Composite MCDA rating</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="cell-lbl"><i class="fa-solid fa-arrows-split-up-and-left"></i> Average Slope</span>
+              <span class="cell-val green" id="home-target-slope">4.8°</span>
+              <span class="cell-sub">82% safe terrain threshold</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="cell-lbl"><i class="fa-solid fa-sun"></i> Sunlight Availability</span>
+              <span class="cell-val gold" id="home-target-sun">89.2%</span>
+              <span class="cell-sub">Peak solar exposure envelope</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="cell-lbl"><i class="fa-solid fa-earth-americas"></i> Direct Earth LOS</span>
+              <span class="cell-val cyan" id="home-target-earth">94.0%</span>
+              <span class="cell-sub">Zero deep blackout intervals</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Major Modules Quick Access Dock -->
+        <div class="home-modules-section">
+          <div class="section-heading-wrap">
+            <span class="hud-tag"><i class="fa-solid fa-network-wired"></i> SUBSYSTEM CHANNELS</span>
+            <h3>Integrated Flight Navigation &amp; Telemetry Subsystems</h3>
+          </div>
+
+          <div class="modules-dock-grid">
+            <!-- Channel 1: 3D Moon Explorer -->
+            <div class="module-dock-card glass-panel" data-quick-tab="explorer">
+              <div class="dock-header">
+                <span class="channel-code">[CH-02 // NAV.GLOBE]</span>
+                <span class="channel-status cyan">ONLINE</span>
+              </div>
+              <h4>3D Interactive Moon Explorer</h4>
+              <p>Three.js high-fidelity lunar globe. Multi-spectral layers: visible albedo, LOLA hypsometric elevation, PSR cold traps, and slope hazard heatmaps.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 2: NASA Moon Trek 3D Terrain Explorer -->
+            <div class="module-dock-card glass-panel glow-cyan" data-quick-tab="moontrek">
+              <div class="dock-header">
+                <span class="channel-code">[CH-03 // GIS.TERR]</span>
+                <span class="channel-status gold">ACTIVE</span>
+              </div>
+              <h4>3D Lunar Terrain Explorer</h4>
+              <p>NASA Moon Trek terrain engine integration. Explore 3D polar massifs, craters, and calculate horizon dip elevation bonuses.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 3: Site Selection -->
+            <div class="module-dock-card glass-panel" data-quick-tab="sites">
+              <div class="dock-header">
+                <span class="channel-code">[CH-04 // CAT.SITE]</span>
+                <span class="channel-status green">NOMINAL</span>
+              </div>
+              <h4>Candidate Site Catalog</h4>
+              <p>Database of 10 Artemis candidate landing zones. Telemetry queries for slope &lt; 5°, minimum illumination, and Earth line-of-sight.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 4: Comparison -->
+            <div class="module-dock-card glass-panel" data-quick-tab="comparison">
+              <div class="dock-header">
+                <span class="channel-code">[CH-05 // ANA.MCDA]</span>
+                <span class="channel-status cyan">ONLINE</span>
+              </div>
+              <h4>Multi-Site MCDA Comparison</h4>
+              <p>Multi-criteria decision analysis engine with radar telemetry, dynamic weighting, and trade-study suitability rankings.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 5: Sunlight Analysis -->
+            <div class="module-dock-card glass-panel" data-quick-tab="sunlight">
+              <div class="dock-header">
+                <span class="channel-code">[CH-06 // SIM.SOL]</span>
+                <span class="channel-status gold">ACTIVE</span>
+              </div>
+              <h4>Sunlight Simulator &amp; Ephemeris</h4>
+              <p>Synodic lunar day model (708h), solar azimuth/elevation vectors, grazing polar shadows, and shadow obstruction windows.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 6: Solar Power Analyzer -->
+            <div class="module-dock-card glass-panel" data-quick-tab="solar">
+              <div class="dock-header">
+                <span class="channel-code">[CH-07 // PWR.BGT]</span>
+                <span class="channel-status gold">READY</span>
+              </div>
+              <h4>Solar Power &amp; Battery Budget</h4>
+              <p>PV array power generation model. Configure panel efficiency, tilt, battery capacity, and calculate margin surplus/deficit.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 7: Earth Comm -->
+            <div class="module-dock-card glass-panel" data-quick-tab="comm">
+              <div class="dock-header">
+                <span class="channel-code">[CH-08 // RF.LINK]</span>
+                <span class="channel-status cyan">ONLINE</span>
+              </div>
+              <h4>Direct-To-Earth RF Comm</h4>
+              <p>27.21-day lunar optical libration cycle simulation (±6.7°). DTE link budget, Earth horizon visibility, and DSN tracking windows.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 8: Safety Analyzer -->
+            <div class="module-dock-card glass-panel" data-quick-tab="safety">
+              <div class="dock-header">
+                <span class="channel-code">[CH-09 // SAF.LND]</span>
+                <span class="channel-status green">NOMINAL</span>
+              </div>
+              <h4>Landing Safety &amp; Dynamics</h4>
+              <p>Touchdown dynamics model, gear stance, tip-over risk, boulder distribution, and automated Go/No-Go flight certification.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 9: Mission Date Planner -->
+            <div class="module-dock-card glass-panel" data-quick-tab="planner">
+              <div class="dock-header">
+                <span class="channel-code">[CH-10 // PLN.WIN]</span>
+                <span class="channel-status cyan">ONLINE</span>
+              </div>
+              <h4>Mission Date &amp; Window Planner</h4>
+              <p>Compute optimal landing windows where solar power and DTE communications align. Powered by NASA/JPL Horizons ephemeris.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 10: Lunar Missions & CSA -->
+            <div class="module-dock-card glass-panel" data-quick-tab="missions">
+              <div class="dock-header">
+                <span class="channel-code">[CH-11 // MIS.CSA]</span>
+                <span class="channel-status gold">ACTIVE</span>
+              </div>
+              <h4>Lunar Missions &amp; CSA Portal</h4>
+              <p>Canadian Space Agency Artemis exploration portal, Canadarm3, Canadian Lunar Rover, and database of 26+ lunar missions.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 11: Mission Report -->
+            <div class="module-dock-card glass-panel" data-quick-tab="report">
+              <div class="dock-header">
+                <span class="channel-code">[CH-12 // REP.CERT]</span>
+                <span class="channel-status cyan">READY</span>
+              </div>
+              <h4>Mission Report Dossier</h4>
+              <p>Generate formal site certification dossiers with complete telemetry matrices, charts, and export directly to PDF, JSON, and CSV.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+
+            <!-- Channel 12: LROC QuickMap GIS -->
+            <div class="module-dock-card glass-panel glow-cyan" data-quick-tab="explorer" data-mode-hint="quickmap">
+              <div class="dock-header">
+                <span class="channel-code">[GIS-MAP // LROC.NAC]</span>
+                <span class="channel-status gold">ACTIVE</span>
+              </div>
+              <h4>LROC QuickMap GIS Interface</h4>
+              <p>Direct integration with NASA/ASU/IM-LDI QuickMap. Polar stereographic NAC mosaics, sub-meter photography, and Earth shadow projections.</p>
+              <span class="dock-action-link">INITIALIZE CHANNEL <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 2: INTERACTIVE 3D MOON EXPLORER
+           ================================================================== -->
+      <section id="view-explorer" class="tab-view">
+        <!-- Explorer Mode Selector Bar -->
+        <div class="explorer-mode-bar glass-panel">
+          <div class="mode-bar-left">
+            <span class="hud-tag"><i class="fa-solid fa-satellite"></i> LUNAR CARTOGRAPHY & GIS ENGINE</span>
+            <span class="mode-bar-title">Interactive Lunar Surface Exploration</span>
+          </div>
+          <div class="mode-switch-buttons">
+            <button class="btn-mode-toggle active" data-explorer-mode="3d">
+              <i class="fa-solid fa-globe"></i> 3D Moon Globe
+            </button>
+            <button class="btn-mode-toggle" data-explorer-mode="quickmap">
+              <i class="fa-solid fa-map-location-dot"></i> LROC QuickMap GIS (Polar)
+            </button>
+            <button class="btn-mode-toggle" data-explorer-mode="split">
+              <i class="fa-solid fa-table-columns"></i> Split View (3D + QuickMap)
+            </button>
+          </div>
+          <div class="mode-bar-right">
+            <a href="https://quickmap.lroc.im-ldi.com/?prjExtent=-6165547.0826951%2C-3751377.7422001%2C5834452.9173049%2C2088622.2577999&earthShadowEnabled=true&proj=10&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="btn-hud-ghost btn-quickmap-external" 
+               title="Open Official LROC QuickMap in New Tab">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Open QuickMap Direct
+            </a>
+          </div>
+        </div>
+
+        <div class="explorer-workspace" id="explorer-dual-workspace">
+          <!-- 1. Three.js Canvas Container -->
+          <div id="moon-canvas-container" class="workspace-pane"></div>
+
+          <!-- 2. LROC QuickMap GIS Viewport Pane -->
+          <div id="quickmap-viewport" class="workspace-pane quickmap-pane" style="display: none;">
+            <div class="quickmap-toolbar">
+              <div class="qm-info">
+                <span class="qm-badge"><i class="fa-solid fa-satellite-dish"></i> NASA LROC / IM-LDI QUICKMAP</span>
+                <span class="qm-params">PROJ: 10 (South Pole Stereographic) &bull; EARTH SHADOW: ACTIVE &bull; LAYER STACK: 3314</span>
+              </div>
+              <div class="qm-actions">
+                <a href="https://quickmap.lroc.im-ldi.com/?prjExtent=-6165547.0826951%2C-3751377.7422001%2C5834452.9173049%2C2088622.2577999&earthShadowEnabled=true&proj=10&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="btn-hud-ghost">
+                  <i class="fa-solid fa-expand"></i> Fullscreen Tab
+                </a>
+              </div>
+            </div>
+
+            <div class="quickmap-iframe-wrapper">
+              <iframe 
+                id="lroc-quickmap-iframe"
+                src="https://quickmap.lroc.im-ldi.com/?prjExtent=-6165547.0826951%2C-3751377.7422001%2C5834452.9173049%2C2088622.2577999&earthShadowEnabled=true&proj=10&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg"
+                title="LROC QuickMap Lunar South Pole GIS"
+                loading="lazy"
+                allow="fullscreen; clipboard-read; clipboard-write; geolocation"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-downloads">
+              </iframe>
+              <div class="quickmap-fallback-banner">
+                <div class="fallback-content">
+                  <i class="fa-solid fa-circle-info cyan"></i>
+                  <span>Live GIS feed from <strong>NASA LROC / Intuitive Machines QuickMap</strong> (South Pole Stereographic Projection &bull; Stack 3314). If interactive iframe is restricted by your browser's third-party cookie policies:</span>
+                  <a href="https://quickmap.lroc.im-ldi.com/?prjExtent=-6165547.0826951%2C-3751377.7422001%2C5834452.9173049%2C2088622.2577999&earthShadowEnabled=true&proj=10&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg" 
+                     target="_blank" 
+                     rel="noopener noreferrer" 
+                     class="btn-hud-primary">
+                    <i class="fa-solid fa-up-right-from-square"></i> Open LROC QuickMap Full Screen
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3D HUD Floating Tooltip -->
+          <div id="moon-tooltip"></div>
+
+          <!-- Explorer Top & Side HUD Overlays -->
+          <div class="explorer-hud-overlay" id="explorer-hud-layer">
+            <div class="hud-top-bar">
+              <!-- Surface Layer Switcher -->
+              <div class="hud-controls-panel glass-panel">
+                <div class="layer-switch-group">
+                  <span class="ctrl-label"><i class="fa-solid fa-layer-group"></i> Surface Layer:</span>
+                  <button class="btn-layer-pill active" data-layer="optical">Optical Albedo</button>
+                  <button class="btn-layer-pill" data-layer="lola">LOLA Topography</button>
+                  <button class="btn-layer-pill" data-layer="psr">PSR Cold Traps</button>
+                  <button class="btn-layer-pill" data-layer="slope">Slope Hazards</button>
+                </div>
+
+                <div class="cam-preset-group">
+                  <span class="ctrl-label"><i class="fa-solid fa-camera"></i> Camera:</span>
+                  <button class="btn-cam-pill active" data-cam-preset="south-pole">South Pole (90°S)</button>
+                  <button class="btn-cam-pill" data-cam-preset="malapert">Malapert Peak</button>
+                  <button class="btn-cam-pill" data-cam-preset="shackleton">Shackleton Rim</button>
+                  <button class="btn-cam-pill" data-cam-preset="overview">Global Orbit</button>
+                  <button class="btn-cam-pill" data-cam-preset="equator">Equator</button>
+                </div>
+              </div>
+
+              <!-- Interactive Sun Angle Slider & Earth Shadow Simulation -->
+              <div class="sun-control-panel">
+                <span class="ctrl-label"><i class="fa-solid fa-sun gold"></i> Sun Angle:</span>
+                <input type="range" id="explorer-sun-slider" min="0" max="360" step="5" value="45">
+                <span id="explorer-sun-val" class="highlight-val">45°</span>
+                <button id="explorer-earth-shadow-btn" class="btn-layer-pill active" title="Toggle Earth Shadow Simulation (QuickMap earthShadowEnabled=true)">
+                  <i class="fa-solid fa-earth-americas cyan"></i> Earth Shadow: ON
+                </button>
+              </div>
+            </div>
+
+            <!-- Bottom Readout Bar -->
+            <div class="hud-bottom-bar">
+              <div class="hud-coord-strip">
+                <i class="fa-solid fa-crosshairs"></i>
+                <span id="hud-cursor-coords">LAT: -89.90° S | LON: 0.00° E</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Explorer Side Telemetry Inspector Drawer -->
+          <div class="explorer-side-hud glass-panel">
+            <div class="side-hud-header">
+              <span class="hud-tag">TARGET TELEMETRY</span>
+              <h3 id="hud-selected-name">Malapert Mountain</h3>
+              <span class="artemis-subtitle" id="hud-selected-desig">LOLA-SP-MLP-04 • Artemis Region 004</span>
+            </div>
+
+            <div class="side-hud-stats">
+              <div class="hud-stat-box">
+                <span class="lbl">COORDINATES</span>
+                <span class="val" id="hud-selected-coords">-84.90° S, 12.90° E</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="lbl">ELEVATION</span>
+                <span class="val" id="hud-selected-elevation">+5040 m</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="lbl">LOCAL SLOPE</span>
+                <span class="val green" id="hud-selected-slope">4.8°</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="lbl">SUITABILITY</span>
+                <span class="val cyan" id="hud-selected-score">96 / 100</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="lbl">SUNLIGHT</span>
+                <span class="val gold" id="hud-selected-sun">89.2%</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="lbl">EARTH LOS</span>
+                <span class="val cyan" id="hud-selected-earth">94.0%</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="lbl">PSR PROXIMITY</span>
+                <span class="val purple" id="hud-selected-psr">7.8 km</span>
+              </div>
+            </div>
+
+            <p class="side-hud-desc" id="hud-selected-desc">
+              Malapert Mountain (Peak) features an expansive, exceptionally smooth summit plateau with near-constant line-of-sight to Earth and high solar illumination.
+            </p>
+
+            <div class="side-hud-actions">
+              <button class="btn-hud-primary" data-tab="comparison">
+                <i class="fa-solid fa-scale-balanced"></i> Compare in Dashboard
+              </button>
+              <button class="btn-hud-secondary" data-tab="safety">
+                <i class="fa-solid fa-shield-halved"></i> Safety Audit
+              </button>
+              <button class="btn-hud-ghost" data-tab="report">
+                <i class="fa-solid fa-file-contract"></i> View Official Dossier
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 2B: 3D LUNAR TERRAIN EXPLORER (NASA MOON TREK)
+           ================================================================== -->
+      <section id="view-moontrek" class="tab-view">
+        <div id="moontrek-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 3: CANDIDATE SITE CATALOG
+           ================================================================== -->
+      <section id="view-sites" class="tab-view">
+        <div id="sites-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 4: MULTI-SITE COMPARISON DASHBOARD
+           ================================================================== -->
+      <section id="view-comparison" class="tab-view">
+        <div id="comparison-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 5: SUNLIGHT & SOLAR ENERGY ANALYSIS
+           ================================================================== -->
+      <section id="view-sunlight" class="tab-view">
+        <div id="sunlight-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 6: EARTH DIRECT COMMUNICATION
+           ================================================================== -->
+      <section id="view-comm" class="tab-view">
+        <div id="comm-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 7: LANDING SAFETY ANALYZER
+           ================================================================== -->
+      <section id="view-safety" class="tab-view">
+        <div id="safety-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 8: SOLAR POWER ANALYZER
+           ================================================================== -->
+      <section id="view-solar" class="tab-view">
+        <div id="solar-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 9: MISSION DATE PLANNER
+           ================================================================== -->
+      <section id="view-planner" class="tab-view">
+        <div id="planner-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 10: LUNAR MISSIONS & CANADIAN SPACE AGENCY (CSA) EXPLORATION
+           ================================================================== -->
+      <section id="view-missions" class="tab-view">
+        <div id="missions-module-root"></div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 11: MISSION REPORT DOSSIER GENERATOR
+           ================================================================== -->
+      <section id="view-report" class="tab-view">
+        <div id="report-module-root"></div>
+      </section>
+
+    </main>
+
+    <!-- Global App Footer -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <div>
+          <strong>LUNAR NAV — Lunar Landing Site Navigator</strong> &bull; NASA Artemis Mission Planning Architecture
+        </div>
+        <div class="footer-data-sources">
+          <span><i class="fa-solid fa-database"></i> NASA PDS & LOLA Elevation (5m/px)</span>
+          <span><i class="fa-solid fa-satellite"></i> LRO Diviner & LAMP Volatiles</span>
+          <span><i class="fa-solid fa-calculator"></i> SPICE Ephemeris Geometry</span>
+        </div>
+        <div>
+          <span>Status: <strong class="green">NOMINAL</strong> &bull; Telemetry Engine v4.2</span>
+        </div>
+      </div>
+    </footer>
+    </div>
+  </div>
+
+  <!-- Dynamic Modal Backdrop Container -->
+  <div id="site-inspector-modal" class="modal-backdrop"></div>
+
+  <!-- Main ES6 Application Orchestrator Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

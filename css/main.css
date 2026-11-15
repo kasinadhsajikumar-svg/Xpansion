@@ -1,0 +1,476 @@
+/* =============================================================================
+   LUNAR NAV — Advanced Aerospace Mission Operations Terminal
+   Mission Operations Visual Identity & Telemetry Theme
+   Colors:
+     Background: #05070B (Almost-Black)
+     Surfaces:   #09121B (Dark Blue-Black)
+     Instrument: #0B2028 (Deep Teal Instrument Surface)
+     Highlights: #36D6D0 (Cyan Technical Highlights & Reticles)
+     Indicators: #65D9B0 (Muted Green Nominal Status)
+     Caution:    #D29922 (Technical Amber)
+     Critical:   #F85149 (Technical Red)
+     Primary:    #D8E5E9 (White-Grey Engineering Text)
+     Secondary:  #78939B (Subdued Slate Secondary Text)
+     Muted:      #4D6670 (Dark Slate Dimension/Key Text)
+     Borders:    #152430 (Thin Instrument Lines)
+     Brd Active: #1B3844 (Instrument Panel Accent)
+   ============================================================================= */
+
+/* ── Reset & Engineering Base ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Operations Control Design Tokens ───────────────────────────────────────── */
+:root {
+  --bg-primary: #05070B;
+  --bg-surface: #09121B;
+  --bg-secondary: #09121B;
+  --bg-instrument: #0B2028;
+  --bg-card: #09121B;
+  --bg-card-hover: #0C1824;
+
+  --accent-cyan: #36D6D0;
+  --accent-cyan-dim: rgba(54, 214, 208, 0.08);
+  --accent-cyan-border: rgba(54, 214, 208, 0.35);
+
+  --accent-blue: #36D6D0;
+  --accent-blue-light: #5BE0DA;
+  --accent-blue-dim: rgba(54, 214, 208, 0.08);
+
+  --status-green: #65D9B0;
+  --status-amber: #D29922;
+  --status-red: #F85149;
+  --status-grey: #486069;
+
+  --text-primary: #D8E5E9;
+  --text-secondary: #78939B;
+  --text-muted: #567079;
+
+  --border-primary: #152430;
+  --border-instrument: #1B323D;
+  --border-accent: rgba(54, 214, 208, 0.4);
+
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --font-body: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+
+  --transition: 0.08s ease;
+}
+
+/* ── Technical Grid Background & Viewport ───────────────────────────────────── */
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-image: 
+    linear-gradient(rgba(54, 214, 208, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(54, 214, 208, 0.015) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ── High-Precision Scrollbars ──────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #152430;
+  border-radius: 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
+}
+
+/* ── Technical Typography Defaults ──────────────────────────────────────────── */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 0.95rem; }
+h5 { font-size: 0.85rem; }
+
+p {
+  color: var(--text-secondary);
+  margin-bottom: 0.65rem;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ── Operations Layout Architecture ─────────────────────────────────────────── */
+.app-layout, .app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-primary);
+}
+
+/* ── Sidebar: Flight Operations Terminal Console ────────────────────────────── */
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 12px 14px 10px 14px;
+  border-bottom: 1px solid var(--border-primary);
+  background: #070E16;
+}
+
+.brand-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.terminal-prefix-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.1em;
+}
+
+.brand-text h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+}
+
+.brand-tagline {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar-section-title {
+  padding: 10px 14px 4px 14px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 4px 8px;
+  overflow-y: auto;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+}
+
+.nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-left: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.nav-btn .nav-code {
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 700;
+  min-width: 28px;
+}
+
+.nav-btn i {
+  width: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.nav-btn:hover {
+  color: var(--text-primary);
+  background: rgba(54, 214, 208, 0.05);
+  border-color: var(--border-primary);
+}
+
+.nav-btn:hover i {
+  color: var(--accent-cyan);
+}
+
+.nav-btn.active {
+  color: #ffffff;
+  background: var(--bg-instrument);
+  border-color: var(--border-instrument);
+  border-left: 2px solid var(--accent-cyan);
+  font-weight: 600;
+}
+
+.nav-btn.active .nav-code {
+  color: var(--accent-cyan);
+}
+
+.nav-btn.active i {
+  color: var(--accent-cyan);
+}
+
+.sidebar-footer {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #070E16;
+}
+
+.sidebar-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.status-indicator-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: 0 0 6px rgba(101, 217, 176, 0.4);
+}
+
+/* ── Main Workspace Area ────────────────────────────────────────────────────── */
+.main-wrapper, .main-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Top System Header: Flight Operations Telemetry Bar ─────────────────────── */
+.telemetry-header {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: #070E16;
+  border-bottom: 1px solid var(--border-instrument);
+  box-shadow: 0 1px 0 rgba(54, 214, 208, 0.15);
+}
+
+.telemetry-top-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 16px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.strip-left, .strip-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.strip-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.strip-item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: 0 0 5px rgba(101, 217, 176, 0.5);
+}
+
+.mission-id-tag {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10.5px;
+  color: var(--accent-cyan);
+  background: var(--bg-instrument);
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-cyan-border);
+  letter-spacing: 0.05em;
+}
+
+/* ── Nav Actions & Mobile Toggle ────────────────────────────────────────────── */
+.mobile-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-instrument);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ── App Content & Tab Views ────────────────────────────────────────────────── */
+.app-content {
+  flex: 1;
+  position: relative;
+}
+
+.tab-view {
+  display: none;
+  opacity: 0;
+  padding: 16px 20px;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.tab-view.active {
+  display: block;
+  opacity: 1;
+  animation: terminalFadeIn 0.1s ease-out forwards;
+}
+
+@keyframes terminalFadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Operations Terminal Footer ─────────────────────────────────────────────── */
+.app-footer {
+  margin-top: auto;
+  background: #070E16;
+  border-top: 1px solid var(--border-primary);
+  padding: 10px 18px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+.footer-inner {
+  max-width: 1680px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-data-sources {
+  display: flex;
+  gap: 14px;
+}
+
+.footer-data-sources span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── Responsive Layout: 960px ───────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    z-index: 2500;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .strip-right {
+    display: none;
+  }
+
+  .telemetry-top-strip {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  .tab-view {
+    padding: 10px;
+  }
+}
